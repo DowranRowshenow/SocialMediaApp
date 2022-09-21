@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% load static %}
+{% load i18n %}
+<html lang="en">
+    <head>
+        <title>Request - Social Media App</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="stylesheet" href="{% static 'styles/friends.css' %}"/>
+    <head>
+    <body>
+        <section>
+            <div class="box center">
+                <form id="friend_request_form" method="GET" action="{% url 'main' %}">
+                    <div class="box_head">
+                        <a class="box_head_title">{% trans 'Proceed Request' %}</a>
+                    </div>
+                    <input id="friend_request_errors" type="hidden" value="{{ form.email.errors.as_text }}" name="friend_request_errors">
+                    <div class="box_footer">
+                        <button class="button" type="submit">{% trans "Continiue" %}</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        <script>friend_request_form.submit();</script>
+    </body>
+</html>

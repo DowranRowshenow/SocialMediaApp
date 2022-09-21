@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+{% trans 'Success' %}
+{% endblock title %}
+
+{% block content %}
+<section>
+    <div class="box center">
+        <div class="box_body">
+            <div class="field text_center">
+                <h2>{% trans "Your account is verified!" %}</h2>
+                <h3>{% trans "Please login" %}</h3>
+            </div>
+        </div>
+        {% if messages %}
+            {% for message in messages %}
+        <div class="box_alert">
+            <a>{{ message }}</a>
+        </div>
+            {% endfor %}
+        {% endif %}
+        <div class="box_footer">
+            <button class="button cur_pointer_dark" onclick="window.location='{% url 'login' %}';">{% trans "Log in" %}</button>
+        </div>
+    </div>
+</section>
+{% endblock content %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'Welcome' %}{% endblock title %}
+
+{% block content %}
+<section>
+    <h1 class="text_center">{% trans 'Welcome To Social Media Web App' %}</h1>
+    <div class="center horizontal">
+        <button class="button cur_pointer_dark" onclick="window.location='{% url 'login' %}';">{% trans 'Login' %}</button>
+        <div class="center">&nbsp;</div>
+        <button class="button cur_pointer_dark" onclick="window.location='{% url 'signup' %}';">{% trans 'Signup' %}</button>
+    </div>
+</section>
+{% endblock content %}

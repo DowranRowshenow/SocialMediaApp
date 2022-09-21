@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+{% trans 'Log In' %}
+{% endblock title %}
+
+{% block content %}
+<section>
+    <div class="box center">
+        <form id="form" method="post">
+            {% csrf_token %}
+            <div class="box_head">
+                <i class="fa fa-arrow-left box_head_back cur_pointer_dark" onclick="window.location='{% url 'index' %}';"></i>
+                <a class="box_head_title">{% trans 'LOG IN' %}</a>
+            </div>
+            <div class="box_body">
+                <div class="field">
+                    <label class="label">{% trans "Username or email:" %}</label>
+                    <!--<label class="label">{{ form.username.label_tag }}</label>-->
+                    <input class="input cur_text_dark" type="text" name="username" id="username_input" placeholder="example@gmail.com">
+                    <a class="error">{{ form.username.errors }}</a>
+                </div>
+                <div class="field">
+                    <!--<label class="label">{% trans "Password:" %}</label>-->
+                    <label class="label">{{ form.password.label_tag }}</label>
+                    <input class="input cur_text_dark" type="Password" name="password" id="password_input" placeholder="********">
+                    <a class="error">{{ form.password.errors }}</a>
+                </div>
+                <div class="field">
+                    <label class="label_2 horizontal">{% trans "Forgot password?" %} 
+                        <a class="link_2 right purp cur_pointer_dark" href='/reset_password'>{% trans "reset password" %}</a>
+                    </label>
+                </div>
+                <div class="field">
+                    <label class="label_2 horizontal">{% trans "Do not have an account yet?" %} 
+                        <a class="link_2 right cur_pointer_dark" href="{% url 'signup' %}">{% trans "signup" %}</a>
+                    </label>
+                </div>
+            </div>
+            <div class="box_footer">
+                <input type="hidden" name="next" value="{% url 'main' %}" />
+                <button class="button cur_pointer_dark" type="submit">{% trans "Log in" %}</button>
+            </div>
+            {% if form.non_field_errors %}
+            <div class="box_alert"> 
+                <a class="error">{{ form.non_field_errors }}</a>
+            </div>
+            {% endif %}
+            {% if messages %}
+                {% for message in messages %}
+            <div class="box_alert">
+                <a>{{ message }}</a>
+            </div>
+                {% endfor %}
+            {% endif %}
+        </form>
+    </div>
+</section>
+{% endblock content %}
