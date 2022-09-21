@@ -1,3 +1,3 @@
-web: gunicorn socialmediaproject.wsgi:application --log-file - --log-level debug
+web: gunicorn socialmediaproject.asgi:application --log-file - --log-level debug
 python manage.py collectstatic --noinput
 manage.py migrate
