@@ -1,0 +1,328 @@
+/* VARIABLES */
+:root
+{
+    --cursor_default: url("../library/cursors/Dark/Arrow.cur");
+    --box_padding: 30px;
+    --box_padding_2: 20px;
+    --box_padding_h: var(--box_padding);
+    --box_padding_w: var(--box_padding);
+    --box_padding_h_2: var(--box_padding_2);
+    --box_padding_w_2: var(--box_padding_2);
+}
+::-webkit-file-upload-button 
+{
+    cursor: url("../library/cursors/Dark/Hand.cur"), pointer;
+    justify-content: center;
+    align-items: center;
+    margin: 0 5px 0 0;
+    width: auto;
+    border: none;
+    background-color: var(--palette_2);
+    padding: 2px 6px 2px 6px;
+    border-radius: 2px;
+    color: var(--whiter);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight: lighter;
+    font-variant: small-caps;
+    font-size: 14px;
+    transition: var(--animations_01);
+}
+::-webkit-file-upload-button:hover
+{
+    color: whitesmoke;
+    transform: scale(1.01);
+}
+/* CURSORS */
+/*
+.cur_default_dark, .cur_default_dark *
+{ cursor: default; }
+.cur_pointer_dark, .cur_pointer_dark *
+{ cursor: pointer; }
+.cur_text_dark, .cur_text_dark *
+{ cursor: text; }
+*/
+
+/* BODY */
+html, body
+{
+    cursor: var(--cursor_default), default;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--psp_0);
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    color: var(--whiter);
+}
+section
+{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+/* ELEMENTS */
+.box
+{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--psp_2);
+    width: 400px;
+    height: max-content;
+    border-radius: 5px;
+    transition: var(--animations_01);
+    box-shadow: var(--shadow_3);
+}
+.box:hover
+{
+    box-shadow: var(--shadow_4);
+}
+.box_head
+{
+    position: relative;
+    padding: var(--box_padding_h) var(--box_padding_w) var(--box_padding_h_2) var(--box_padding_w);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px 5px 0 0;
+    background-color: var(--aco_4);
+}
+.box_head_title
+{
+    overflow-wrap: anywhere;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 26px;
+    font-variant: small-caps;
+    transition: var(--animations_01);
+}
+.box_head_title:hover
+{
+    color: white;
+}
+.box_head_cancel
+{
+    position: absolute;
+    font-size: 26px;
+    right: var(--box_padding);
+    transition: var(--animations_01);
+    color: var(--psp_7);
+}
+.box_head_cancel:hover
+{
+    color: var(--psp_6);
+    transform: scale(1.1);
+}
+.box_head_back
+{
+    position: absolute;
+    font-size: 22px;
+    left: var(--box_padding);
+    transition: var(--animations_01);
+}
+.box_head_back:hover
+{
+    color: white;
+    transform: scale(1.1);
+}
+.box_body
+{
+    display: flex;
+    flex-direction: column;
+    border-top: 2px solid rgba(0,0,0,0.4);
+    padding: 10px var(--box_padding_w) 10px var(--box_padding_w);
+}
+.box_footer
+{
+    display: flex;
+    flex-direction: column;
+    border-top: 2px solid rgba(0,0,0,0.4);
+    padding: var(--box_padding_h_2) var(--box_padding_w) var(--box_padding_h) var(--box_padding_w);
+}
+.box_alert
+{
+    border-top: 2px solid rgba(0,0,0,0.45);
+    display: flex;
+    flex-direction: column;
+    padding: var(--box_padding_h_2) var(--box_padding_w) var(--box_padding_h) var(--box_padding_w);
+}
+.label
+{
+    overflow-wrap: anywhere;
+    transition: var(--animations_01);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 18px;
+}
+.label:hover
+{
+    color: white;
+}
+.label_2
+{
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;
+    transition: var(--animations_01);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 16px;
+    color: var(--aco_1);
+}
+.label_2:hover
+{
+    color: var(--aco_0);
+}
+.field
+{
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0 10px 0;
+}
+.error
+{
+    color: var(--psp_6);
+    padding: 0;
+}
+.error ul
+{
+    color: var(--psp_6);
+    margin: 0 0 0 20px;
+    padding: 0;
+}
+.link, .link_2
+{
+    font-size: 20px;
+    color: rgba(121,162,205,0.5);
+    transition: var(--animations_01);
+}
+.link:hover, .link_2:hover
+{
+    color: var(--palette_4);
+}
+.link_2
+{
+    font-size: 16px;
+}
+.purp
+{
+    color: rgba(112, 75, 94, 0.5);
+    transition: var(--animations_01);
+}
+.purp:hover
+{
+    color: var(--psp_7);
+}
+.input
+{
+    padding: 5px;
+    border: none;
+    width: auto;
+    height: 20px;
+    font-size: var(--default_font);
+    color: var(--whiter);
+    background-color: var(--aco_3);
+    margin: 10px 0 10px 0;
+    border-radius: 3px;
+}
+.button
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    border: none;
+    background-color: var(--psp_5);
+    padding: 5px;
+    min-width: 150px;
+    border-radius: 5px;
+    color: var(--whiter);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight: lighter;
+    font-variant: small-caps;
+    font-size: 18px;
+    transition: var(--animations_01);
+}
+.button:hover
+{
+    color: whitesmoke;
+    transform: scale(1.01);
+}
+.zoom 
+{
+    zoom: 0.9;
+}
+@media screen and (max-width: 7680px)
+{
+    .zoom 
+    {
+        zoom: 2;
+    }
+}
+@media screen and (max-width: 3840px)
+{
+    .zoom 
+    {
+        zoom: 1.5;
+    }
+}
+@media screen and (max-width: 2560px)
+{
+    .zoom 
+    {
+        zoom: 1.25;
+    }
+}
+@media screen and (max-width: 2560px)
+{
+    .zoom 
+    {
+        zoom: 0.9;
+    }
+}
+@media screen and (max-width: 1800px)
+{
+    .zoom 
+    {
+        zoom: 0.8;
+    }
+}
+@media screen and (max-width: 1600px)
+{
+    .zoom 
+    {
+        zoom: 0.75;
+    }
+}
+@media screen and (max-width: 1366px)
+{
+    .zoom 
+    {
+        zoom: 0.6;
+    }
+}
+@media screen and (max-width: 1080px)
+{
+    .zoom 
+    {
+        zoom: 0.5;
+    }
+}
+@media screen and (max-width: 900px)
+{
+    .zoom 
+    {
+        zoom: 0.4;
+    }
+}
+@media screen and (max-width: 768px)
+{
+    .zoom 
+    {
+        zoom: 0.3;
+    }
+}
