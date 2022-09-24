@@ -9,7 +9,6 @@ var is_dropdown = false;
 const userName = JSON.parse(document.getElementById('json-userName').textContent);
 const userEmail = JSON.parse(document.getElementById('json-userEmail').textContent);
 const userHash = JSON.parse(document.getElementById('json-userHash').textContent);
-const friendSocket = new WebSocket('ws://' + window.location.host + '/ws/friends/' + userName + '/');
 
 /* MAIN */
 Main();
@@ -33,7 +32,6 @@ function Settings()
         }
     } 
     catch {}
-    console.log(settings);
 }
 function saveSettings()
 {
@@ -54,106 +52,6 @@ function Defaults()
         { document.getElementById('animations').checked = settings.animaitons; }
         catch {}
         animaitons();
-    }
-}
-
-/* WEBSOCKETS */
-friendSocket.onmessage = function(e)
-{
-    const data = JSON.parse(e.data);
-    if (data.type == 'friend_request')
-    {
-        let html = '';
-        grouper = document.getElementById("friend_requests_grouper");
-        if (!side.contains(grouper))
-        {
-            html += '<div id="friend_requests_grouper" class="grouper">';
-            html +=     '<i class="fa fa-angle-down"></i>';
-            html +=     '<a class="grouper_text">' + trans_friend_requests.innerHTML + '</a>';
-            html +=     '<i class="fa fa-circle font_red font_8"></i>';
-            html += '</div>';
-        }
-        html += '<div class="item cur_pointer_dark dropdown">';
-        html +=     '<img src="' + data.sender_image + '" class="item_img"></img>';
-        html +=     '<a class="item_text">' + data.sender_username + '</a>';
-        html +=     '<i class="profile_bar_i fa fa-ellipsis-vertical cur_pointer_dark dropbtn" onclick="on_dropdown_click(dropdown_request_' + data.sender_username + ');"></i>'; 
-        html +=     '<div id="dropdown_request_' + data.sender_username + '" class="dropdown-content">'; 
-        html +=         '<div class="drop_item horizontal">'; 
-        html +=             '<i class="drop_item_icon fa address-card"></i>'; 
-        html +=             '<a class="drop_item_text">' + trans_profile.innerHTML + '</a>'; 
-        html +=         '</div>'; 
-        html +=         '<div class="drop_item horizontal" onclick="window.location=\'' + '/friends/friend_request_accept/' + data.sender_email + '\';">'; 
-        html +=             '<i class="drop_item_icon fa fa-check font_green"></i>';
-        html +=             '<a class="drop_item_text">' + trans_accept.innerHTML + '</a>'; 
-        html +=         '</div>'; 
-        html +=         '<div class="drop_item horizontal" onclick="window.location=\'' + '/friends/friend_request_decline/' + data.sender_email +  '\';">'; 
-        html +=             '<i class="drop_item_icon fa fa-cancel font_red"></i>'; 
-        html +=             '<a class="drop_item_text">' + trans_decline.innerHTML + '</a>'; 
-        html +=         '</div>'; 
-        html +=     '</div>'; 
-        html += '</div>';
-        document.getElementById("side").innerHTML += html;
-    }
-    else if (data.type == 'friend_accept')
-    {
-        if (confirm(data.username + ' has accepted your friend request.')) {
-            location.reload();
-        }
-    }
-    else if (data.type == 'friend_decline')
-    {
-        alert(data.email);
-    }
-}
-function friend_request(username = null)
-{
-    username = document.getElementById('friend_request_form_input').value;
-    if (username)
-    {
-        const requestSocket = new WebSocket('ws://' + window.location.host + '/ws/friends/' + username + '/');
-        
-        requestSocket.onopen = function (e) 
-        {
-            requestSocket.send(JSON.stringify({
-                'username': username,
-            }));
-        }
-        requestSocket.onmessage = function (e) 
-        {
-            requestSocket.close(1000, "Work complete");
-
-            const data = JSON.parse(e.data);
-            if (data.type == 'error')
-            {
-                friend_request_form_error.innerHTML = '<li>' + data.error + '</li>';
-            }
-            else if (data.type == 'friend_request')
-            {
-                close_section(friend_section);
-                let html = '';
-                grouper = document.getElementById("requested_friends_grouper");
-                if (!nav.contains(grouper))
-                {
-                    html += '<div id="requested_friends_grouper" class="grouper width_auto">';
-                    html +=     '<i class="fa fa-angle-down"></i>';
-                    html +=     '<a class="grouper_text">' + trans_sent_friend_requests.innerHTML + '</a>';
-                    html +=     '<i class="fa fa-circle font_red font_8"></i>';
-                    html += '</div>';
-                }
-                html += '<div class="item cur_pointer_dark dropdown">';
-                html +=     '<img src="' + data.receiver_image + '" class="item_img"></img>';
-                html +=     '<a class="item_text">' + username + '</a>';
-                html +=     '<i class="profile_bar_i fa fa-ellipsis-vertical cur_pointer_dark dropbtn" onclick="on_dropdown_click(dropdown_request_' + username + ');"></i>'; 
-                html +=     '<div id="dropdown_request_' + username + '" class="dropdown-content">'; 
-                html +=         '<div class="drop_item horizontal">'; 
-                html +=             '<i class="drop_item_icon fa address-card"></i>'; 
-                html +=             '<a class="drop_item_text">' + trans_profile.innerHTML + '</a>'; 
-                html +=         '</div>'; 
-                html +=     '</div>'; 
-                html += '</div>'; 
-                document.getElementById("nav").innerHTML += html;
-            }
-        }
     }
 }
 
@@ -179,6 +77,26 @@ for (var i = 0; i < friends.length; i++)
         }
     }, false);
 }
+function grouper(parent, icon)
+{
+    elements = parent.children;
+    if (elements[0].style.display == 'none')
+    {
+        icon.style.rotate = '0deg';
+        for (let i = 0; i < elements.length; i++) 
+        {
+            elements[i].style.display = 'flex';
+        }
+    }
+    else
+    {
+        icon.style.rotate = '-90deg';
+        for (let i = 0; i < elements.length; i++) 
+        {
+            elements[i].style.display = 'none';
+        }
+    }
+}
 function open_section(item, image_url = null, content = null, element = null)
 {
     item.style.opacity = 1;
@@ -198,11 +116,12 @@ function close_section(item)
     scrollBottom_2 = document.getElementById("scroll_bottom_chat");
     item.style.opacity = 0;
     item.style.visibility = 'hidden';
-    friend_request_form_input.value = "";
-    post_form_content_input.value = "";
-    post_form_image_input.value = "";
-    image_section_image.src = "";
-    edit_post_form_content_input.value = "";
+    var clear = document.getElementsByClassName('clear_this');
+    for (let i = 0; i < clear.length; i++) 
+    {
+        clear[i].value = '';    
+        clear[i].innerHTML = '';
+    }
 }
 function on_dropdown_click(item) 
 {

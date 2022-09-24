@@ -1,6 +1,11 @@
 /* VARIABLES */
 :root
 {
+    /* CURSORS */
+    --cursor_default: url("../cursors/Dark/Arrow.cur"), default;
+    --cursor_pointer: url("../cursors/Dark/Hand.cur"), pointer;
+    --cursor_text: url("../cursors/Dark/IBeam.cur"), text;
+
     /* COLORS */
     --dark: rgb(4,5,5);
     --dark_blue: rgb(15,15,25);
@@ -37,11 +42,13 @@
     --palette_7: rgb(57,72,100);
     --palette_8: rgb(48,61,62);
 
+    /* FONTS */
     --default_font: 14px;
     --default_icon_font: 16px;
     --sender_icon_font: 20px;
     --sender_font: 16px;
 
+    /* TRANSITIONS */
     --animations_01: 0.1s;
     --animations_0: 0.3s;
     --animations_1: 0.5s;
@@ -50,6 +57,7 @@
     --animations_4: 1.2s;
     --animations_5: 2s;
 
+    /* SHADOWS */
     --shadow_0: 0px 1px 3px 0px rgba(0,0,0,0.2);
     --shadow_05: 0px 4px 8px 0px rgba(0,0,0,0.2);
     --shadow_1: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -108,6 +116,34 @@ input::-webkit-inner-spin-button
     -webkit-appearance: none;
     margin: 0;
 }
+::-webkit-calendar-picker-indicator 
+{
+    filter: invert(1);
+    cursor: var(--cursor_pointer), pointer;
+}
+::-webkit-file-upload-button 
+{
+    cursor: var(--cursor_pointer), pointer;
+    justify-content: center;
+    align-items: center;
+    margin: 0 5px 0 0;
+    width: auto;
+    border: none;
+    background-color: var(--palette_2);
+    padding: 2px 6px 2px 6px;
+    border-radius: 2px;
+    color: var(--whiter);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight: lighter;
+    font-variant: small-caps;
+    font-size: 14px;
+    transition: var(--animations_01);
+}
+::-webkit-file-upload-button:hover
+{
+    color: whitesmoke;
+    transform: scale(1.01);
+}
 :focus
 {
     outline: none;
@@ -137,31 +173,6 @@ input:-webkit-autofill:active
 {
     -webkit-tap-highlight-color: transparent;
 }
-/* CURSORS
-*
-{
-    SYSTEM CURSOR
-    cursor: auto;
-
-    DARK UI CURSOR
-    cursor: url("../cursors/Dark/Arrow.cur"), default;
-
-    DARK UI LIGHT CURSOR
-    cursor: url("../cursors/Dark/Arrow.cur"), default;
-}
-.cur_default_dark, .cur_default_dark *
-{ cursor: default; }
-.cur_pointer_dark, .cur_pointer_dark *
-{ cursor: pointer; }
-.cur_text_dark, .cur_text_dark *
-{ cursor: text; }
-.cur_default_light, cur_default_light *
-{ cursor: default; }
-.cur_pointer_light, cur_pointer_light *
-{ cursor: pointer; }
-.cur_text_light, .cur_text_light *
-{ cursor: text; }
-*/
 
 /* ELEMENTS */
 .body, .html
@@ -489,8 +500,14 @@ input:checked + .slider:before
 {
     width: 50px;
     height: 50px;
+    border: 1px solid var(--aco_3);
     border-radius: 2px;
     object-fit: cover;
+}
+.user_field_img:hover
+{
+    opacity: 0.8;
+    filter: blur(1);
 }
 .user_field_text
 {
@@ -756,15 +773,21 @@ input:checked + .slider:before
 
 /* SIZES */
 .width_50
-{ width: 50px; }
+{ width: 50px !important; }
 .width_100
-{ width: 100px; }
+{ width: 100px !important; }
 .width_200
-{ width: 200px; }
+{ width: 200px !important; }
 .width_400
-{ width: 400px; }
+{ width: 400px !important; }
+.width_500
+{ width: 500px !important; }
 .width_600
-{ width: 600px; }
+{ width: 600px !important; }
+.width_800
+{ width: 800px !important; }
+.width_1000
+{ width: 1000px !important; }
 .width_auto
 { width: auto; }
 .width_min
@@ -858,12 +881,20 @@ input:checked + .slider:before
 /* CURSORS */
 .cur_auto, .cur_auto *
 { cursor: auto; }
-.cur_default, .cur_default *
+
+.cur_default_auto, .cur_default_auto *
 { cursor: default; }
-.cur_pointer, .cur_pointer *
+.cur_pointer_auto, .cur_pointer_auto *
 { cursor: pointer; }
-.cur_text, .cur_text *
+.cur_text_auto, .cur_text_auto *
 { cursor: text; }
+
+.cur_default, .cur_default *
+{ cursor: var(--cursor_default); }
+.cur_pointer, .cur_pointer *
+{ cursor: var(--cursor_pointer); }
+.cur_text, .cur_text *
+{ cursor: var(--cursor_text); }
 
 .cur_default_dark, .cur_default_dark *
 { cursor: url("../cursors/Dark/Arrow.cur"), default; }

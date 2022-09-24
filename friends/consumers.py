@@ -71,6 +71,7 @@ class FriendConsumer(AsyncWebsocketConsumer):
                 self.room_group_name,
                 {
                     'type': 'friend_request',
+                    'sender_hash': response['sender_hash'],
                     'sender_username': response['sender_username'],
                     'sender_email': response['sender_email'],
                     'sender_image': response['sender_image'],
@@ -80,6 +81,7 @@ class FriendConsumer(AsyncWebsocketConsumer):
             )
 
     async def friend_request(self, event):
+        sender_hash = event['sender_hash']
         sender_username = event['sender_username']
         sender_email = event['sender_email']
         sender_image = event['sender_image']
@@ -88,6 +90,7 @@ class FriendConsumer(AsyncWebsocketConsumer):
 
         await self.send(text_data=json.dumps({
             'type': "friend_request",
+            'sender_hash': sender_hash,
             'sender_username': sender_username,
             'sender_email': sender_email,
             'sender_image': sender_image,
@@ -151,6 +154,7 @@ class FriendConsumer(AsyncWebsocketConsumer):
             return error
         else: 
             return {
+                'sender_hash': user.hash,
                 'sender_username': user.username,
                 'sender_email': user.email,
                 'sender_image': user.image.url,

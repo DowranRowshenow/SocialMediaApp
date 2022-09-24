@@ -489,8 +489,14 @@ input:checked + .slider:before
 {
     width: 50px;
     height: 50px;
+    border: 1px solid var(--aco_3);
     border-radius: 2px;
     object-fit: cover;
+}
+.user_field_img:hover
+{
+    opacity: 0.8;
+    filter: blur(1);
 }
 .user_field_text
 {

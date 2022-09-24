@@ -1,7 +1,7 @@
 /* VARIABLES */
 :root
 {
-    --cursor_default: url("../library/cursors/Dark/Arrow.cur");
+    /* SCALES */
     --box_padding: 30px;
     --box_padding_2: 20px;
     --box_padding_h: var(--box_padding);
@@ -9,43 +9,10 @@
     --box_padding_h_2: var(--box_padding_2);
     --box_padding_w_2: var(--box_padding_2);
 }
-::-webkit-file-upload-button 
-{
-    cursor: url("../library/cursors/Dark/Hand.cur"), pointer;
-    justify-content: center;
-    align-items: center;
-    margin: 0 5px 0 0;
-    width: auto;
-    border: none;
-    background-color: var(--palette_2);
-    padding: 2px 6px 2px 6px;
-    border-radius: 2px;
-    color: var(--whiter);
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-weight: lighter;
-    font-variant: small-caps;
-    font-size: 14px;
-    transition: var(--animations_01);
-}
-::-webkit-file-upload-button:hover
-{
-    color: whitesmoke;
-    transform: scale(1.01);
-}
-/* CURSORS */
-/*
-.cur_default_dark, .cur_default_dark *
-{ cursor: default; }
-.cur_pointer_dark, .cur_pointer_dark *
-{ cursor: pointer; }
-.cur_text_dark, .cur_text_dark *
-{ cursor: text; }
-*/
 
 /* BODY */
 html, body
 {
-    cursor: var(--cursor_default), default;
     display: flex;
     justify-content: center;
     align-items: center;
