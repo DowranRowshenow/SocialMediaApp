@@ -1,4 +1,6 @@
+import os
 from django.db import models
+from django.dispatch import receiver
 
 from socialmediaproject import settings
 
@@ -58,3 +60,10 @@ class Post(models.Model):
             else:
                 self.liked_users.remove(account)
                 self.disliked_users.add(account)
+        
+        
+@receiver(models.signals.post_delete, sender=Post)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    if instance.image: 
+        if os.path.isfile(instance.image.path): 
+            os.remove(instance.image.path)

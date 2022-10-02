@@ -67,6 +67,26 @@ function Defaults()
         catch {}
         animaitons();
     }
+    /* UI ELEMENTS*/
+    if (!document.getElementById("friend_profile"))
+    { 
+        if (document.getElementById("friend_profile_send_request"))
+        { document.getElementById("friend_profile_send_request").style.display = 'flex'; }
+    }
+    if (document.getElementById("profile_image"))
+    {
+        document.getElementById("profile_image").addEventListener('load', function ()
+        {
+            if (settings.animaitons)
+            {
+                var rgb = getAverageRGB(document.getElementById("profile_image"));
+                console.log(rgb.r, rgb.g, rgb.b);
+                var root = document.querySelector(':root');
+                root.style.setProperty('--profile_shadow', '0px 2px 20px 0px rgba('+rgb.r+','+rgb.g+','+rgb.b+',0.1');
+                root.style.setProperty('--profile_shadow_2', '0px 2px 40px 0px rgba('+rgb.r+','+rgb.g+','+rgb.b+',1');
+            }
+        });
+    }
 }
 function SelectionListener(e)
 {
@@ -74,9 +94,53 @@ function SelectionListener(e)
 }
 
 /* FUNCTIONS */
+function sleep(ms) 
+{
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 function clearUrl(page)
 {
-    window.history.replaceState(null, null, window.location.pathname + '?page=' + page);
+    window.history.replaceState(null, null, window.location.pathname + '?pg=' + page);
+}
+function getAverageRGB(imgEl) 
+{
+    var blockSize = 5, // only visit every 5 pixels
+        defaultRGB = {r:0,g:0,b:0}, // for non-supporting envs
+        canvas = document.createElement('canvas'),
+        context = canvas.getContext && canvas.getContext('2d'),
+        data, width, height,
+        i = -4,
+        length,
+        rgb = {r:0,g:0,b:0},
+        count = 0;
+    if (!context) 
+    {
+        return defaultRGB;
+    }
+    height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
+    width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;
+    context.drawImage(imgEl, 0, 0);
+    try 
+    {
+        data = context.getImageData(0, 0, width, height);
+    } 
+    catch(e) 
+    {
+        /* security error, img on diff domain */alert('x');
+        return defaultRGB;
+    }
+    length = data.data.length;
+    while ( (i += blockSize * 4) < length ) 
+    {
+        ++count;
+        rgb.r += data.data[i];
+        rgb.g += data.data[i+1];
+        rgb.b += data.data[i+2];
+    }
+    rgb.r = ~~(rgb.r/count);
+    rgb.g = ~~(rgb.g/count);
+    rgb.b = ~~(rgb.b/count);
+    return rgb;
 }
 
 /* ON CLICK EVENTS */

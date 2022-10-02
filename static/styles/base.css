@@ -214,6 +214,10 @@ section
     font-size: 18px;
     transition: var(--animations_01);
 }
+.button::selection
+{
+	background-color: transparent;
+}
 .button:hover
 {
     color: whitesmoke;

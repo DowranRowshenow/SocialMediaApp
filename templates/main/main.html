@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load humanize %}
+{% load custom_tags %}
 
 {% block title %}{% trans 'Main' %}{% endblock title %}
 
@@ -16,7 +17,7 @@
         <input id="friend_form_input" type="hidden" value="" name="dm">
     </form>
     <form id="page_form" method="get">
-        <input id="page_form_input" type="hidden" value="" name="page">
+        <input id="page_form_input" type="hidden" value="" name="pg">
     </form>
     <form id="post_detail_form" method="get">
         <input id="post_detail_form_input" type="hidden" value="" name="pd">
@@ -28,7 +29,7 @@
 
     <div id="nav" class="nav">
         <div class="nav_header vertical">
-            <div class="search_bar" onmouseover="search_icon.classList.add('fa-beat');" onmouseout="search_icon.classList.remove('fa-beat');">
+            <div class="search_bar" onmouseover="search_icon.classList.toggle('fa-beat');" onmouseout="search_icon.classList.toggle('fa-beat');">
                 <input class="search_bar_input cur_text font_light" type="text" placeholder="{% trans 'Search for anything' %}">
                 <i id="search_icon" class="fa fa-search cur_pointer font_light"></i>
             </div>
@@ -50,8 +51,8 @@
                 <a class="grouper_text font_light">{% trans "MENUS" %}</a>
             </div>
             <div id="menus_group">
-                    {% with page=request.GET.page|default:''%}
-                    {% if page == 'profile'%}  
+                    {% with page=request.GET.pg|default:''%}
+                    {% if page == 'profile'%}
                 <div class="item_active cur_pointer" onclick="page('profile');" onmouseover="profile_icon.classList.add('fa-bounce');" onmouseout="profile_icon.classList.remove('fa-bounce');">
                     {% else %}
                 <div class="item cur_pointer" onclick="page('profile');" onmouseover="profile_icon.classList.add('fa-bounce');" onmouseout="profile_icon.classList.remove('fa-bounce');">
@@ -60,7 +61,7 @@
                     <i id='profile_icon' class="item_icon fa fa-user-circle font_light"></i>
                     <a class="item_text font_light">{% trans "Profile" %}</a>
                 </div>
-                {% with page=request.GET.page|default:''%}
+                {% with page=request.GET.pg|default:''%}
                     {% if page == 'settings'%}  
                 <div class="item_active cur_pointer" onclick="page('settings');" onmouseover="settings_icon.classList.add('fa-spin');" onmouseout="settings_icon.classList.remove('fa-spin');">
                     {% else %}
@@ -70,7 +71,7 @@
                     <i id='settings_icon' class="item_icon fa fa-gear font_light"></i>
                     <a class="item_text font_light">{% trans "Settings" %}</a>
                 </div>
-                {% with page=request.GET.page|default:'' post_detail=request.GET.pd|default:'' %}
+                {% with page=request.GET.pg|default:'' post_detail=request.GET.pd|default:'' %}
                     {% if page == 'posts' or post_detail != '' %}      
                     <div class="item_active cur_pointer" onclick="page('posts')" onmouseover="posts_icon.classList.add('fa-beat');" onmouseout="posts_icon.classList.remove('fa-beat');">
                     {% else %}
@@ -111,9 +112,9 @@
                     <img src="{{ friend.photo.url }}" class="item_img" value="{{ friend.hash }}"></img>
                     <a class="item_text font_light" value="{{ friend.hash }}">{{ friend.username }}</a>
                     {% if friend.is_online %}
-                    <i class="fa fa-circle font_green font_8"></i>
+                    <i class="fa fa-circle font_green font_8" value="{{ friend.hash }}"></i>
                     {% else %}
-                    <i class="fa fa-circle font_red font_8"></i>
+                    <i class="fa fa-circle font_red font_8" value="{{ friend.hash }}"></i>
                     {% endif %}
                     <i class="profile_bar_i fa fa-ellipsis-vertical cur_pointer dropbtn dont font_light" onclick="on_dropdown_click(dropdown_friend_{{ friend.id }});"></i>
                     <div id="dropdown_friend_{{ friend.id }}" class="dropdown-content dont">
@@ -166,7 +167,7 @@
             </div>
             <div class="profile_box">
                 <div class="field">
-                    <img class="profile_box_image cur_pointer" src="{{ user.image.url }}" onclick="open_section(image_section, this.src);">
+                    <img id="profile_image" class="profile_box_image cur_pointer" src="{{ user.image.url }}" onclick="open_section(image_section, this.src);">
                 </div>
                 <div class="field horizontal">
                     <a class="label profile_label">{{ user.username }}</a>
@@ -215,18 +216,21 @@
                 </div>
                 <div class="field horizontal">
                     {% if not user in friends %}
-                    <button class="button cur_pointer" onclick="friend_request('{{ user.username }}');">{% trans "Send friend request" %}</button>
-                    {% else %}
                         {% for requested_friend in requested_friends %}
                             {% if user == requested_friend.receiver %}
-                        <button class="button red cur_pointer" onclick="">{% trans "Cancel friend request" %}</button>
+                    <div id="friend_profile"></div>
+                    <button id="friend_profile_request_cancel" class="button red cur_pointer" onclick="">{% trans "Cancel friend request" %}</button>
                             {% endif %}
                         {% endfor %}
                         {% for friend_request in friend_requests %}
                             {% if user == friend_request.sender %}
-                        <button class="button red cur_pointer" onclick="">{% trans "Decline friend request" %}</button>
+                    <div id="friend_profile"></div>
+                    <button class="button cur_pointer" onclick="">{% trans "Accept friend request" %}</button>
+                    <div class="spacer_3"></div>
+                    <button class="button red cur_pointer" onclick="">{% trans "Decline friend request" %}</button>
                             {% endif %}
                         {% endfor %}
+                    <button id="friend_profile_send_request" style="display: none;" class="button cur_pointer" onclick="friend_request('{{ user.username }}');">{% trans "Send friend request" %}</button>
                     {% endif %}
                 </div>
             </div>
@@ -238,7 +242,7 @@
         {% endif %}
     {% endwith %}
 
-    {% with page=request.GET.page|default:'' %}
+    {% with page=request.GET.pg|default:'' %}
         {% if page == 'settings' %}
         <div class="shadow_3">&nbsp;</div>
         <div id="scroll_top" class="item cur_pointer" onclick="scrollToTop();">
@@ -316,7 +320,7 @@
         {% endif %}
     {% endwith %}
 
-    {% with page=request.GET.page|default:'' %}
+    {% with page=request.GET.pg|default:'' %}
         {% if page == 'profile' %}
         <div id="chat_messages" class="chat_messages posts vertical width_max scroll_y animations_0" onscroll="checkScroll();">
             <div class="shadow_3">
@@ -331,7 +335,7 @@
             </div>
             <div class="profile_box">
                 <div class="field">
-                    <img class="profile_box_image cur_pointer" src="{{ request.user.image.url }}" onclick="open_section(image_section, this.src);">
+                    <img id="profile_image" class="profile_box_image cur_pointer" src="{{ request.user.image.url }}" onclick="open_section(image_section, this.src);">
                 </div>
                 <div class="field horizontal">
                     <a class="label profile_label">{{ request.user.username }}</a>
@@ -390,7 +394,7 @@
             </div>
             <!--
             <div class="post_box">       
-                {% for post in posts %}
+                {% for post in item_list %}
                 <div class="post box center">
                     {% if post.user == request.user %}
                     <div class="box_head dark_blue">
@@ -466,7 +470,7 @@
         </div>
         <div id="chat_messages" class="chat_messages smooth_scroll vertical width_max scroll_y animations_0" onscroll="checkScroll();">
             <div class="message_user spacer_2">&nbsp;</div>
-            {% for message in messages %}
+            {% for message in item_list %}
                 {% if message.sender == request.user %}
             <div class="message_box_rigth right margin_right_20">
                 <div class="message_right">
@@ -504,7 +508,7 @@
         {% endif %}
     {% endwith %}
 
-    {% with page=request.GET.page|default:'' %}
+    {% with page=request.GET.pg|default:'' %}
         {% if page == 'posts' %}
         <div class="shadow_3">
             <div id="add_post" class="button cur_pointer" onclick="open_section(post_section);">
@@ -520,7 +524,7 @@
             <div>&nbsp;</div>
             <div>&nbsp;</div>
             <div>&nbsp;</div>
-            {% for post in posts %}
+            {% for post in item_list %}
             <div class="post box center">
                 {% if post.user == request.user %}
                 <div class="box_head dark_blue">
@@ -680,7 +684,7 @@
                 </div>
             </div>
             {% endif %}
-            {% for comment in comments %}
+            {% for comment in item_list %}
                 {% if comment.user == request.user %}
             <div class="right">
                 <div class="message_box_rigth right margin_right_20">
@@ -743,7 +747,6 @@
             <div class="grouper width_auto" onclick="grouper(friend_requests_grouper, friend_requests_grouper_icon);">
                 <i id="friend_requests_grouper_icon" class="fa fa-angle-down font_light"></i>
                 <a class="grouper_text font_light">{% trans "FRIEND REQUESTS" %}</a>
-                <i class="fa fa-circle font_red font_8"></i>
             </div>
             <div id="friend_requests_grouper">
                 {% for friend_request in friend_requests %}
@@ -788,12 +791,15 @@
             </div>
         </div>
         <div class="box_footer">
-            <button class="button cur_pointer" onclick="friend_request();">{% trans "Send Request" %}</button>
+            <button class="button cur_pointer" onclick="friend_request();">
+                {% trans "Send Request" %}&nbsp;
+                <div id="friend_section_loader" class="loader"></div>
+            </button>
         </div>
     </div>
 </section>
 
-{% with page=request.GET.page|default:'' error=request.GET.e|default:'' %}
+{% with page=request.GET.pg|default:'' error=request.GET.e|default:'' %}
     {% if page == 'posts' and 'pc' in error %}
 <section id="post_section" class="section z_10 visible">
     {% else %}
@@ -804,7 +810,7 @@
             {% csrf_token %}
             <div class="box_head">
                 <a class="box_head_title">{% trans 'Create Post' %}</a>
-                <i class="fa fa-close box_head_cancel cur_pointer" onclick="close_section(post_section); clearUrl('{{ request.GET.page }}');"></i>
+                <i class="fa fa-close box_head_cancel cur_pointer" onclick="close_section(post_section); clearUrl('{{ request.GET.pg }}');"></i>
             </div>
             <div class="box_body">
                 <div class="field">
@@ -836,18 +842,24 @@
 </section>
 {% endwith %}
 
-{% with page=request.GET.page|default:'' error=request.GET.e|default:'' %}
+{% with page=request.GET.pg|default:'' error=request.GET.e|default:'' %}
     {% if page == 'posts' and 'pe' in error %}
 <section id="edit_post_section" class="section z_10 visible">
     {% else %}
 <section id="edit_post_section" class="section z_10">
     {% endif %}
     <div class="box center width_500">
+        {% with pk=request.GET.pk|default:None %}
+            {% if pk %}
+        <form id="edit_post_form" method="post" enctype="multipart/form-data" action="{% url 'edit_post' pk %}">
+            {% else %}
         <form id="edit_post_form" method="post" enctype="multipart/form-data">
+            {% endif %}
+        {% endwith %}
             {% csrf_token %}
             <div class="box_head">
                 <a class="box_head_title">{% trans 'Edit Post' %}</a>
-                <i class="fa fa-close box_head_cancel cur_pointer" onclick="close_section(edit_post_section); clearUrl('{{ request.GET.page }}');"></i>
+                <i class="fa fa-close box_head_cancel cur_pointer" onclick="close_section(edit_post_section); clearUrl('{{ request.GET.pg }}');"></i>
             </div>
             <div class="box_body">
                 <div class="field">
@@ -891,14 +903,14 @@
             <div class="box_footer horizontal">
                 <div onclick="delete_post_form.submit();" class="button cur_pointer width_200 red">{% trans "Delete Post" %}</div>
                 <div class="center">&nbsp;</div>
-                <button onclick="clearUrl('{{ request.GET.page }}');" type="submit" class="button width_200 cur_pointer">{% trans "Save Post" %}</button>
+                <button onclick="" type="submit" class="button width_200 cur_pointer">{% trans "Save Post" %}</button>
             </div>
         </form>
     </div>
 </section>
 {% endwith %}
 
-{% with page=request.GET.page|default:'' error=request.GET.e|default:'' %}
+{% with page=request.GET.pg|default:'' error=request.GET.e|default:'' %}
     {% if page == 'profile' and 'ae' in error %}
 <section id="edit_profile_section" class="section z_10 visible">
     {% else %}
@@ -909,7 +921,7 @@
             {% csrf_token %}
             <div class="box_head">
                 <a class="box_head_title">{% trans 'Edit Profile' %}</a>
-                <i class="fa fa-close box_head_cancel cur_pointer" onclick="close_section(edit_profile_section); clearUrl('{{ request.GET.page }}');"></i>
+                <i class="fa fa-close box_head_cancel cur_pointer" onclick="close_section(edit_profile_section); clearUrl('{{ request.GET.pg }}');"></i>
             </div>
             <div class="box_body">
                 <div class="field">

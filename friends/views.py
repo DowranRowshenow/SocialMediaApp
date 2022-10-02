@@ -41,6 +41,25 @@ class FriendRequestAcceptView(View):
             return HttpResponseRedirect(reverse('main'))
 
 
+class FriendRequestCancelView(View):
+    
+    def get(self, request, email):
+        channel_layer = get_channel_layer()
+        friend = User.objects.filter(email=email).first()
+        if friend:
+            friend_request = FriendRequest.objects.filter(sender=friend, receiver=request.user).first()
+            friend_request.decline()
+            async_to_sync(channel_layer.group_send)(f'friends_{friend_request.sender.username}',{
+                "type": "friend_cancel",
+                "email": friend_request.receiver.email,
+                "username": friend_request.receiver.username
+            })
+        try:
+            return redirect(request.META.get('HTTP_REFERER'))
+        except:
+            return HttpResponseRedirect(reverse('main'))
+
+
 class FriendRequestDeclineView(View):
     
     def get(self, request, email):

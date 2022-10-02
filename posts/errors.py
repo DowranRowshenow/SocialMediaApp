@@ -1,5 +1,5 @@
 class PostErrors():
-    page = "page=posts"
+    page = "pg=posts"
     c10pc = "e=c10pc"
     c95pc = "e=c95pc"
     c71pc = "e=c71pc"

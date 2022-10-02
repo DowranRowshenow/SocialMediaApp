@@ -17,7 +17,8 @@ DEBUG = False
 #DEBUG_PROPAGATE_EXCEPTIONS = True
 
 ALLOWED_HOSTS = [
-    'socialmediadr.herokuapp.com'
+    'socialmediadr.herokuapp.com',
+	'127.0.0.1',
 ]
 
 
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'friends',
     'rooms',
     'posts',
+    'notifications',
     'main',
 ]
 
@@ -72,14 +74,24 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'socialmediaproject.wsgi.application'
-ASGI_APPLICATION = 'socialmediaproject.asgi.application'
+ASGI_APPLICATION = 'socialmediaproject.routing.application'
 
+'''
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels.layers.InMemoryChannelLayer'
     }
 }
+'''
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

@@ -1,5 +1,5 @@
 class AccountErrors():
-    page = "page=profile"
+    page = "pg=profile"
     c10ae = "e=c10ae"
     c95ae = "e=c95ae"
     c71ae = "e=c71ae"
